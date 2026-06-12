@@ -28,6 +28,38 @@ I review results, evidence, caveats, and decisions — not implementation detail
 
 If the next action is unclear, the session starts by fixing `STATUS.md`.
 
+## System Map
+
+To understand the KTG system this repo orchestrates — or to diagnose an operational
+issue ("we got a signal but no order went out") — read these first; they save you
+tracing source across three repos:
+
+- **`docs/context/ktg-system.md`** — the pipeline map: kotquant/KTG publishes a signal
+  → ZMQ `stark/events4` → korpse runs the trade-plan state machine → orders on the
+  Kore account; kore-proxy is the return path. Components, signal types, gating,
+  topics/ports/hosts, log locations.
+- **`docs/runbooks/`** — operational runbooks. Start with
+  **`docs/runbooks/missing-order.md`** for a missing or dropped order.
+
+These map into the authoritative per-repo docs (`korpse/docs/signal-flow.md`,
+`korpse/CLAUDE.md`, `kore-proxy/README.md`); read those for field-level detail.
+
+## Where to fix signal / order behavior
+
+**Prefer fixing trading-signal behavior in kotquant (signal generation) over korpse
+(the Kore strategy) whenever the fix can be made on the kotquant side.** korpse runs
+as a Kore-platform strategy and **script promotion is painful** (bundle → upload →
+server build → forward-test reload), so changes there are slower and riskier to ship.
+Keep korpse a faithful executor of the signal contract and push sign / quantity /
+target decisions upstream into kotquant.
+
+Only change korpse when the behavior genuinely cannot live in the signal — the
+script-owned policy in `korpse/docs/signal-flow.md` (order routing, reprice cadence,
+reject handling, pricing rails). Example: the 2026-06-12 short-increase sign issue
+(positive `quantity` published for a short → korpse `invalid_target`) was fixed in
+kotquant by publishing a signed increase quantity, leaving korpse untouched. See
+`docs/runbooks/missing-order.md`.
+
 ## Session Recovery
 
 If a session ends unexpectedly, the next session must resume without escalation.
@@ -59,7 +91,7 @@ run two concurrent sessions in the same working directory.
    worktree, PR, or active status row unless execution starts immediately.
 7. For deep work: scenarios define the contract. Executors build autonomously.
 8. PRs are checkpoints, not endpoints. Deep initiatives continue after merge.
-9. You report after completion. I archive. For deep initiatives, the archive includes a Process Profile (see operating-model.md §14). We move to the next thing.
+9. You report after completion. I archive. For deep initiatives, the archive includes a Process Profile (see `~/repos/ai-max/docs/operating-model.md` §14). We move to the next thing.
 
 ## Reminders
 
@@ -210,7 +242,7 @@ Adversarial review is a second perspective that challenges each step. Default:
 Human can override per initiative: `Adversarial: on/off` in the intent.
 
 When on, the agent produces a challenge report after scenarios, build, and verify.
-See operating-model.md §15 for full mechanism.
+See `~/repos/ai-max/docs/operating-model.md` §15 for full mechanism.
 
 ## Tools
 
@@ -248,9 +280,14 @@ The agent has access to the following standalone tools in this repo:
 
 ## Domain Context and Decisions
 
-- **Domain context:** Cross-repo architecture, system map, dependencies: `.claude/` in `~/repos/`.
-- **Global decisions:** Operating model and structural decisions: `DECISIONS.md` in this repo.
-- **Best practices / tradeoffs:** Code, architecture, process preferences: `PREFERENCES.md` in this repo.
+- **KTG system map:** How the orchestrated pipeline works + how to diagnose it:
+  `docs/context/ktg-system.md` and `docs/runbooks/` in this repo. See also `.claude/context.md`.
+- **Cross-repo domain context:** Broader multi-repo architecture and dependencies:
+  `.claude/` in `~/repos/`.
+- **Global decisions:** Structural decisions specific to this repo: `DECISIONS.md` in
+  this repo. Reusable operating-model decisions: `~/repos/ai-max/DECISIONS.md`.
+- **Best practices / tradeoffs:** KTG-specific code/process preferences:
+  `PREFERENCES.md` in this repo. Reusable preferences: `~/repos/ai-max/PREFERENCES.md`.
 
 The agent reads these as part of session startup. Structural decisions in `DECISIONS.md` are not revisited without explicit human direction.
 
