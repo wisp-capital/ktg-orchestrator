@@ -1,0 +1,18 @@
+[package]
+name = "ktg-proxy"
+version = "0.1.0"
+edition = "2021"
+authors = ["Wisp Capital <dev@wisp.capital>"]
+description = "KTG orchestration proxy — wraps KTG-related repos for cross-cutting development and PR workflow"
+license = "MIT"
+
+[dependencies]
+clap = { version = "4", features = ["derive"] }
+serde = { version = "1", features = ["derive"] }
+toml = "0.8"
+anyhow = "1"
+walkdir = "2"
+
+[[bin]]
+name = "ktg-proxy"
+path = "src/main.rs"

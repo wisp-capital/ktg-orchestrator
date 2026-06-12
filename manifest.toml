@@ -1,0 +1,17 @@
+# ktg-proxy wrapped repos — the single source of truth for KTG-related work.
+#
+# Orchestration-only: source lives in each repo's own checkout listed below.
+# This repo vendors NO source. The tool assembles each wrapped repo into
+# ./workspace/<name> as an isolated git worktree branched from origin/main,
+# and ships changes back as a PR targeting main.
+
+branch_prefix = "stark/"
+
+# Add KTG-related repos here as needed.
+# Example entry:
+# [[repo]]
+# name = "kotquant"
+# path = "~/repos/kotquant"
+# remote = "git@github.com:wisp-capital/kotquant.git"
+# trunk = "main"
+# lang = "kotlin"
