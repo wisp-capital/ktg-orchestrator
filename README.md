@@ -1,4 +1,4 @@
-# ktg-proxy
+# ktg-orchestrator
 
 A proxy / orchestration meta-repo for KTG (Kore Trading Gateway) related work.
 
@@ -6,7 +6,7 @@ Wraps KTG-related source repos, provides a single workspace for cross-cutting
 development, and ships changes back to each repo's origin as a pull request.
 
 It is **orchestration-only**: it stores no source code. The real source lives in
-each repo's own checkout listed in `manifest.toml`. ktg-proxy only holds a
+each repo's own checkout listed in `manifest.toml`. ktg-orchestrator only holds a
 manifest, a Rust-based tool, and docs. Assembled worktrees land in `workspace/`
 (gitignored) at runtime.
 
@@ -31,10 +31,10 @@ just teardown --delete-branch
 Without `just`, build and run the Rust tool directly:
 ```sh
 cargo build --release
-./target/release/ktg-proxy assemble my-task --repo kotquant
-./target/release/ktg-proxy status
-./target/release/ktg-proxy ship --draft
-./target/release/ktg-proxy teardown --delete-branch
+./target/release/ktg-orchestrator assemble my-task --repo kotquant
+./target/release/ktg-orchestrator status
+./target/release/ktg-orchestrator ship --draft
+./target/release/ktg-orchestrator teardown --delete-branch
 ```
 
 ## How it works
@@ -53,7 +53,7 @@ cargo build --release
 Intent -> Scenarios -> Build -> Verify -> Archive, shallow/deep/spike
 classification, truth labels, maturity levels, and handoff patterns.
 
-ktg-proxy holds the KTG-specific state for that framework:
+ktg-orchestrator holds the KTG-specific state for that framework:
 
 - `STATUS.md` is the active initiative dashboard.
 - `initiatives/` holds active INIT docs.

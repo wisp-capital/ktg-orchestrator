@@ -1,4 +1,4 @@
-# ktg-proxy Justfile
+# ktg-orchestrator Justfile
 
 set shell := ["bash", "-c"]
 

@@ -1,4 +1,4 @@
-# ktg-proxy wrapped repos — the single source of truth for KTG-related work.
+# ktg-orchestrator wrapped repos — the single source of truth for KTG-related work.
 #
 # Orchestration-only: source lives in each repo's own checkout listed below.
 # This repo vendors NO source. The tool assembles each wrapped repo into
