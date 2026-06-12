@@ -18,6 +18,19 @@ manifest, a Rust-based tool, and docs. Assembled worktrees land in `workspace/`
 | kore-proxy | `~/repos/kore-proxy` | `main` | Rust |
 | korpse | `~/repos/korpse` | `main` | C++ |
 
+## The KTG system
+
+These three repos form one loop: a **kotquant/KTG** strategy publishes a signal to
+ZMQ `stark/events4` → **korpse** (a Kore strategy) runs the trade-plan state machine
+and places the order on the Kore account → **kore-proxy** carries Kore's events back
+to internal systems. To understand the pipeline or diagnose an operational problem,
+read these (they save tracing source across all three repos):
+
+- **[`docs/context/ktg-system.md`](docs/context/ktg-system.md)** — the system map:
+  components, signal types, state machine + gating, topics/ports/hosts, log locations.
+- **[`docs/runbooks/missing-order.md`](docs/runbooks/missing-order.md)** — diagnose a
+  signal that produced no order (e.g. an Increase that didn't add).
+
 ## Usage
 
 ```sh
