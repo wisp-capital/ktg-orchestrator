@@ -7,11 +7,23 @@
 
 branch_prefix = "stark/"
 
-# Add KTG-related repos here as needed.
-# Example entry:
-# [[repo]]
-# name = "kotquant"
-# path = "~/repos/kotquant"
-# remote = "git@github.com:wisp-capital/kotquant.git"
-# trunk = "main"
-# lang = "kotlin"
+[[repo]]
+name = "kotquant"
+path = "~/repos/kotquant"
+remote = "git@github.com:wisp-capital/kotquant.git"
+trunk = "main"
+lang = "kotlin"
+
+[[repo]]
+name = "kore-proxy"
+path = "~/repos/kore-proxy"
+remote = "git@github.com:wisp-capital/kore-proxy.git"
+trunk = "main"
+lang = "rust"
+
+[[repo]]
+name = "korpse"
+path = "~/repos/korpse"
+remote = "git@github.com:wisp-capital/korpse.git"
+trunk = "main"
+lang = "cpp"

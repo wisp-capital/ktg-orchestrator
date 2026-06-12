@@ -12,7 +12,11 @@ manifest, a Rust-based tool, and docs. Assembled worktrees land in `workspace/`
 
 ## Wrapped repos
 
-`manifest.toml` is the source of truth — edit it to add repos for KTG work.
+| Repo | Checkout | Base branch | Lang |
+|------|----------|-------------|------|
+| kotquant | `~/repos/kotquant` | `main` | Kotlin |
+| kore-proxy | `~/repos/kore-proxy` | `main` | Rust |
+| korpse | `~/repos/korpse` | `main` | C++ |
 
 ## Usage
 
