@@ -13,6 +13,13 @@ path = "~/repos/kotquant"
 remote = "git@github.com:wisp-capital/kotquant.git"
 trunk = "main"
 lang = "kotlin"
+status = "active"
+role = "KTG signal generation and upstream trading behavior"
+edit_policy = "source"
+default_assemble = true
+read_first = ["AGENTS.md", "README.md"]
+verify = ["./gradlew test --no-daemon"]
+routes = ["signal generation", "KTG strategy", "trading behavior", "kotquant"]
 
 [[repo]]
 name = "kore-proxy"
@@ -20,6 +27,13 @@ path = "~/repos/kore-proxy"
 remote = "git@github.com:wisp-capital/kore-proxy.git"
 trunk = "main"
 lang = "rust"
+status = "active"
+role = "Kore return path and proxy for execution events"
+edit_policy = "source"
+default_assemble = true
+read_first = ["AGENTS.md", "README.md"]
+verify = ["cargo test --workspace"]
+routes = ["Kore proxy", "execution events", "return path"]
 
 [[repo]]
 name = "korpse"
@@ -27,3 +41,10 @@ path = "~/repos/korpse"
 remote = "git@github.com:wisp-capital/korpse.git"
 trunk = "main"
 lang = "cpp"
+status = "active"
+role = "Kore strategy executor and trade-plan state machine"
+edit_policy = "source"
+default_assemble = true
+read_first = ["AGENTS.md", "README.md", "docs/signal-flow.md"]
+verify = ["cmake --build build"]
+routes = ["order routing", "trade-plan state machine", "missing order", "korpse"]

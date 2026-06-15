@@ -41,6 +41,11 @@ tracing source across three repos:
 - **`docs/runbooks/`** — operational runbooks. Start with
   **`docs/runbooks/missing-order.md`** for a missing or dropped order.
 
+For cross-repo agent routing, use the generated
+[`docs/navigation/manifest-index.md`](docs/navigation/manifest-index.md). Refresh
+it with `just nav-index` after editing `manifest.toml`, and verify it with
+`just nav-check`.
+
 These map into the authoritative per-repo docs (`korpse/docs/signal-flow.md`,
 `korpse/CLAUDE.md`, `kore-proxy/README.md`); read those for field-level detail.
 

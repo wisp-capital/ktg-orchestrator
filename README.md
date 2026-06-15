@@ -18,6 +18,11 @@ manifest, a Rust-based tool, and docs. Assembled worktrees land in `workspace/`
 | kore-proxy | `~/repos/kore-proxy` | `main` | Rust |
 | korpse | `~/repos/korpse` | `main` | C++ |
 
+For cross-repo agent routing, use the generated
+[`docs/navigation/manifest-index.md`](docs/navigation/manifest-index.md). Refresh
+it with `just nav-index` after editing `manifest.toml`, and verify it with
+`just nav-check`.
+
 ## The KTG system
 
 These three repos form one loop: a **kotquant/KTG** strategy publishes a signal to
@@ -37,6 +42,8 @@ read these (they save tracing source across all three repos):
 just assemble my-task --repo kotquant --repo kore-proxy
 just assemble my-task
 just status
+just nav-index
+just nav-check
 just ship --draft
 just teardown --delete-branch
 ```

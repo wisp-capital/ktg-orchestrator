@@ -18,6 +18,14 @@ assemble slug *args:
 status:
     @cargo run --release -- status
 
+# Regenerate manifest-derived cross-repo navigation files
+nav-index:
+    python3 /Users/alexcstark/repos/ai-max/scripts/nav_index.py --root . write
+
+# Verify generated navigation files are in sync with manifest.toml
+nav-check:
+    python3 /Users/alexcstark/repos/ai-max/scripts/nav_index.py --root . check
+
 # Ship changes (push + open PRs)
 ship *args:
     cargo run --release -- ship {{args}}
