@@ -7,6 +7,22 @@
 
 branch_prefix = "stark/"
 
+# Known overlaps where a task could plausibly belong to either repo. `just route`
+# surfaces the matching rule when its top two candidates are exactly this pair.
+
+[[disambiguation]]
+ambiguity = "kotquant vs korpse"
+prefer = "kotquant"
+over = "korpse"
+rule = "KTG signal generation / strategy logic -> kotquant; order routing / trade-plan state machine / executor -> korpse"
+
+[[disambiguation]]
+ambiguity = "kore-proxy vs korpse"
+prefer = "kore-proxy"
+over = "korpse"
+rule = "Kore return path / proxy for execution events -> kore-proxy; strategy executor / trade-plan state machine -> korpse"
+
+
 [[repo]]
 name = "kotquant"
 path = "~/repos/kotquant"
@@ -20,6 +36,7 @@ default_assemble = true
 read_first = ["AGENTS.md", "README.md"]
 verify = ["./gradlew test --no-daemon"]
 routes = ["signal generation", "KTG strategy", "trading behavior", "kotquant"]
+examples = ["generate a KTG signal", "change the KTG strategy logic", "fix kotquant trading behavior"]
 
 [[repo]]
 name = "kore-proxy"
@@ -34,6 +51,7 @@ default_assemble = true
 read_first = ["AGENTS.md", "README.md"]
 verify = ["cargo test --workspace"]
 routes = ["Kore proxy", "execution events", "return path"]
+examples = ["fix the Kore return path", "proxy an execution event"]
 
 [[repo]]
 name = "korpse"
@@ -48,3 +66,4 @@ default_assemble = true
 read_first = ["AGENTS.md", "README.md", "docs/signal-flow.md"]
 verify = ["cmake --build build"]
 routes = ["order routing", "trade-plan state machine", "missing order", "korpse"]
+examples = ["fix the trade-plan state machine", "route an order through korpse", "handle a missing order"]

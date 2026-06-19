@@ -24,6 +24,11 @@
         "KTG strategy",
         "trading behavior",
         "kotquant"
+      ],
+      "examples": [
+        "generate a KTG signal",
+        "change the KTG strategy logic",
+        "fix kotquant trading behavior"
       ]
     },
     {
@@ -47,6 +52,10 @@
         "Kore proxy",
         "execution events",
         "return path"
+      ],
+      "examples": [
+        "fix the Kore return path",
+        "proxy an execution event"
       ]
     },
     {
@@ -72,7 +81,26 @@
         "trade-plan state machine",
         "missing order",
         "korpse"
+      ],
+      "examples": [
+        "fix the trade-plan state machine",
+        "route an order through korpse",
+        "handle a missing order"
       ]
+    }
+  ],
+  "disambiguation": [
+    {
+      "ambiguity": "kotquant vs korpse",
+      "prefer": "kotquant",
+      "over": "korpse",
+      "rule": "KTG signal generation / strategy logic -> kotquant; order routing / trade-plan state machine / executor -> korpse"
+    },
+    {
+      "ambiguity": "kore-proxy vs korpse",
+      "prefer": "kore-proxy",
+      "over": "korpse",
+      "rule": "Kore return path / proxy for execution events -> kore-proxy; strategy executor / trade-plan state machine -> korpse"
     }
   ]
 }

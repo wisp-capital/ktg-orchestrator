@@ -26,6 +26,12 @@ nav-index:
 nav-check:
     python3 /Users/alexcstark/repos/ai-max/scripts/nav_index.py --root . check
 
+# Route a task to the repo(s) it belongs in — the cheap first call at task start.
+# Prints ranked candidates, the matched phrases, cross-repo likelihood, and the
+# suggested `just assemble <slug> --repo <name>` command. Add --json for machine use.
+route query *args:
+    python3 /Users/alexcstark/repos/ai-max/scripts/route.py --root . "{{query}}" {{args}}
+
 # Ship changes (push + open PRs)
 ship *args:
     cargo run --release -- ship {{args}}

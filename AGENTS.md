@@ -41,7 +41,11 @@ tracing source across three repos:
 - **`docs/runbooks/`** — operational runbooks. Start with
   **`docs/runbooks/missing-order.md`** for a missing or dropped order.
 
-For cross-repo agent routing, use the generated
+**Before editing a wrapped repo for a task**, run `just route "<task>"` — the
+cheap first call that names which repo(s) the task belongs to (from
+`manifest.toml`), flags likely cross-repo work, and prints the suggested
+`just assemble <slug> --repo <name>` command. Read only the routed repos'
+`read_first` next. For the full route map, see the generated
 [`docs/navigation/manifest-index.md`](docs/navigation/manifest-index.md). Refresh
 it with `just nav-index` after editing `manifest.toml`, and verify it with
 `just nav-check`.
