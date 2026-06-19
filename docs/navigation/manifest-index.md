@@ -15,6 +15,11 @@ Refresh with `nav-index`; verify with `nav-check`.
 | kore-proxy | Kore return path and proxy for execution events | main | active | source | yes |
 | korpse | Kore strategy executor and trade-plan state machine | main | active | source | yes |
 
+## Disambiguation (known overlaps)
+
+- **kotquant vs korpse**: KTG signal generation / strategy logic -> kotquant; order routing / trade-plan state machine / executor -> korpse
+- **kore-proxy vs korpse**: Kore return path / proxy for execution events -> kore-proxy; strategy executor / trade-plan state machine -> korpse
+
 ## Repo Details
 
 ### kotquant
@@ -30,6 +35,7 @@ Refresh with `nav-index`; verify with `nav-check`.
 - read first: `AGENTS.md`, `README.md`
 - verify: `./gradlew test --no-daemon`
 - routes: signal generation; KTG strategy; trading behavior; kotquant
+- examples: generate a KTG signal; change the KTG strategy logic; fix kotquant trading behavior
 
 ### kore-proxy
 
@@ -44,6 +50,7 @@ Refresh with `nav-index`; verify with `nav-check`.
 - read first: `AGENTS.md`, `README.md`
 - verify: `cargo test --workspace`
 - routes: Kore proxy; execution events; return path
+- examples: fix the Kore return path; proxy an execution event
 
 ### korpse
 
@@ -58,3 +65,4 @@ Refresh with `nav-index`; verify with `nav-check`.
 - read first: `AGENTS.md`, `README.md`, `docs/signal-flow.md`
 - verify: `cmake --build build`
 - routes: order routing; trade-plan state machine; missing order; korpse
+- examples: fix the trade-plan state machine; route an order through korpse; handle a missing order
