@@ -7,6 +7,13 @@ one place to develop across them, and ships changes back to each origin as a PR.
 ai-max framework contract at `~/repos/ai-max/AGENTS.md` (read that too). If this
 file conflicts with another doc here, this file wins.
 
+## Standing User Preferences
+
+- When the user asks you to merge a pull request, squash merge by default. Use a
+  merge commit only when the user explicitly asks for a merge commit. If a
+  repo-specific workflow appears to require a merge commit, stop and call out
+  the conflict before merging.
+
 The framework's bundled skills (notably `amx-spec`, for eliciting a Spec from
 rough intent — ai-max hard rule 7) are wired in via `.pi/settings.json`, which
 points at `~/repos/ai-max/skills`. Use `amx-spec` to author a Spec.
