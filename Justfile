@@ -51,3 +51,17 @@ state:
 # lean operating-model workflow CLI (new/check/eval/gaps/state) — see ~/repos/ai-max
 amx *args:
     @{{python}} "{{ai_max_dir}}/scripts/amx.py" --root . {{args}}
+
+# --- Orchestrator Inbox (capture / review / batch-complete) ---
+
+# session-start nudge: surface Inbox (daily) + Someday (weekly) if a review is due
+inbox-status:
+    @{{python}} "{{ai_max_dir}}/scripts/inbox.py" status
+
+# show all items (which=inbox|someday|all) — for daily/weekly review
+inbox-show which="inbox":
+    @{{python}} "{{ai_max_dir}}/scripts/inbox.py" show --which {{which}}
+
+# mark a review complete (weekly=true for the Someday review)
+inbox-reviewed weekly="":
+    @{{python}} "{{ai_max_dir}}/scripts/inbox.py" reviewed {{weekly}}

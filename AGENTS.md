@@ -124,11 +124,55 @@ when merged + green (shown by `just state`).
 Startup for KTG work:
 
 1. Read `~/repos/ai-max/AGENTS.md` for the framework contract.
-2. Read this file for ktg-orchestrator-specific rules.
-3. **Route the task first:** `just route "<task>"`.
-4. Run `just state` — the derived dashboard (open / blocked / next / eval) is the
+2. Run `python3 ~/repos/ai-max/scripts/due_reminders.py` — act on anything due.
+3. Run `python3 ~/repos/ai-max/scripts/inbox.py status` — surface the Inbox
+   (daily) and Someday/Maybe (weekly) if a review is due. See **Inbox** below.
+4. Read this file for ktg-orchestrator-specific rules.
+5. **Route the task first:** `just route "<task>"`.
+6. Run `just state` — the derived dashboard (open / blocked / next / eval) is the
    whole picture. `just amx check` confirms Specs are well-formed.
-5. Run `just status` and assemble worktrees with `just assemble <slug>`.
+7. Run `just status` and assemble worktrees with `just assemble <slug>`.
+
+## Inbox (capture, review, batch-complete)
+
+The **Inbox** is a low-friction capture utility for tasks and ideas the human
+hasn't triaged yet. It is a **separate upstream layer**: it does **not** route
+into `SESSION_TODO.md`, `ideas/`, or `initiatives/` at the daily review.
+
+**Capture.** When the human says *"add a task: …"* or *"add an idea: …"*
+(verbatim, paraphrase, or any natural-language equivalent), append the item in
+**this** repo — co-located with its context — by running:
+
+```
+python3 ~/repos/ai-max/scripts/inbox.py add task "<text>"
+python3 ~/repos/ai-max/scripts/inbox.py add idea "<text>"
+```
+
+Never hand-edit `INBOX.md` or `SOMEDAY.md`; the script is the only mutation
+point (it keeps ids monotonic and the format valid).
+
+**Daily review (soft, once/day).** When `inbox status` fires (items exist newer
+than the last review), show **all items at once** and **propose action-batches**
+(groups to do-together / drop / defer) — never item-by-item. The human picks
+whole groups:
+
+- **drop** → `inbox.py drop T-NNNN [T-NNNN …]`
+- **defer** (blocked on something) → `inbox.py someday T-NNNN <waiting-on note>`
+  (moves to `SOMEDAY.md`, reviewed weekly)
+- **batch-complete** → `inbox.py batch T-NNNN [T-NNNN …] [--context "…"]` writes
+  a **self-contained** prompt to `prompts/BATCH-YYYY-MM-DD-<slug>.md` and prints
+  the path. Hand the path back to the human as a link; do **not** execute the
+  batch in this session. Enrich terse items with the context a fresh session
+  needs, and confirm that enrichment is correct before relying on it.
+
+When the review closes (done, or consciously deferring the rest), stamp it:
+`inbox.py reviewed`. The nudge stays quiet for the rest of that day.
+
+**Weekly review (Someday).** Items in `SOMEDAY.md` are blocked on something, not
+low-priority. When `inbox status` flags Someday (≥7 days stale), show all items
+at once and propose: **promote-to-real-work** (via the existing
+`ideas/` → INIT → Spec path — see `ideas/README.md`), **keep** (still blocked),
+or **drop**. Stamp with `inbox.py reviewed --weekly`.
 
 ## Rules
 
