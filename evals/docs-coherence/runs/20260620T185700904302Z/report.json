@@ -1,0 +1,10 @@
+{
+  "schema": "ai-max.docs-coherence.v1",
+  "generated_at": "2026-06-20T18:57:00.904302+00:00",
+  "commit": "b8143ea3df92e07f5536ecf2977587e959f65695",
+  "report": "docs/docs-scan/DOCS-SCAN-2026-06-20-framework-v7-1-adopt.md",
+  "scope": "framework-v7.1-adoption",
+  "high_findings": 0,
+  "medium_findings": 0,
+  "low_findings": 0
+}

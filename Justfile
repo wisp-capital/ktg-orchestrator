@@ -46,7 +46,7 @@ ship *args:
 teardown *args:
     cargo run --release -- teardown {{args}}
 
-# --- ai-max workflow CLI (lean v6) ---
+# --- ai-max workflow CLI (lean v7.1) ---
 
 # derived state dashboard from specs/ + eval reports (replaces STATUS.md)
 state:
@@ -55,6 +55,26 @@ state:
 # lean operating-model workflow CLI (new/check/eval/gaps/state) — see ~/repos/ai-max
 amx *args:
     @{{python}} "{{ai_max_dir}}/scripts/amx.py" --root . {{args}}
+
+# Verify stale generated artifacts are not in the active agent context path
+context-audit *args="":
+    @{{python}} "{{ai_max_dir}}/scripts/amx.py" --root . context-audit {{args}}
+
+# Show whether the recurring agent-run docs coherence scan is fresh
+docs-scan-status *args="":
+    @{{python}} "{{ai_max_dir}}/scripts/amx.py" --root . docs-scan status {{args}}
+
+# Emit the self-contained prompt for an agent-run docs coherence scan
+docs-scan-prompt *args="":
+    @{{python}} "{{ai_max_dir}}/scripts/amx.py" --root . docs-scan prompt {{args}}
+
+# Record a completed agent-run docs coherence scan
+docs-scan-record report high="0" medium="0" low="0" *args="":
+    @{{python}} "{{ai_max_dir}}/scripts/amx.py" --root . docs-scan record --report {{report}} --high {{high}} --medium {{medium}} --low {{low}} {{args}}
+
+# Agent metrics: prompt count + agent runtime per session, signal only
+metrics *args="":
+    @{{python}} "{{ai_max_dir}}/scripts/amx.py" metrics {{args}}
 
 # --- Orchestrator Inbox (capture / review / batch-complete) ---
 
