@@ -22,6 +22,10 @@ assemble slug *args:
 status:
     @cargo run --release -- status
 
+# Clone/pull every primary checkout listed in manifest.toml
+pull-all:
+    {{python}} "{{ai_max_dir}}/tools/worktree-assembler.py" pull-all
+
 # Regenerate manifest-derived cross-repo navigation files
 nav-index:
     {{python}} "{{ai_max_dir}}/scripts/nav_index.py" --root . write
