@@ -75,9 +75,11 @@ classification, truth labels, maturity levels, and handoff patterns.
 
 ktg-orchestrator holds the KTG-specific state for that framework:
 
-- `STATUS.md` is the active initiative dashboard.
-- `initiatives/` holds active INIT docs.
-- `checkpoints/` holds deep-work handoff docs.
+- `just state` is the derived dashboard for active Spec and proof state.
+- `STATUS.md` is retained only as legacy transition context until all stale rows
+  have been retired.
+- Legacy work artifacts and deep-work handoffs are historical context unless a
+  current Spec or materialization record points at them.
 - `archive/` holds completed initiatives and spikes.
 
 Implementation work still happens in linked repo worktrees under `workspace/`.

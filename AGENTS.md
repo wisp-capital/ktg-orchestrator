@@ -108,7 +108,7 @@ leaving korpse untouched. See `docs/runbooks/missing-order.md`.
 ## AI-max operating model
 
 AI-max is the reusable framework; ktg-orchestrator is a consumer holding KTG work
-state on the **lean v7.1 model** (`framework_version` in `manifest.toml`). Read
+state on the **lean v7.2 model** (`framework_version` in `manifest.toml`). Read
 `~/repos/ai-max/AGENTS.md` for the authoritative definitions. In short:
 
 - **A Spec tree** defines target state: a System Spec, with optional Subsystem
@@ -154,7 +154,7 @@ Startup for KTG work:
 
 The **Inbox** is a low-friction capture utility for tasks and ideas the human
 hasn't triaged yet. It is a **separate upstream layer**: it does **not** route
-into `SESSION_TODO.md`, `ideas/`, or `initiatives/` at the daily review.
+into Specs, deltas, materialization records, or chores at the daily review.
 
 **Capture.** When the human says *"add a task: …"* or *"add an idea: …"*
 (verbatim, paraphrase, or any natural-language equivalent), append the item in
@@ -227,5 +227,5 @@ ship in `~/repos/ai-max/tools/`.
 
 ---
 
-Follows the lean operating model v7.1
+Follows the lean operating model v7.2
 (`~/repos/ai-max/docs/operating-model.md`).

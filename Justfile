@@ -46,13 +46,13 @@ ship *args:
 teardown *args:
     cargo run --release -- teardown {{args}}
 
-# --- ai-max workflow CLI (lean v7.1) ---
+# --- ai-max workflow CLI (lean v7.2) ---
 
 # derived state dashboard from specs/ + eval reports (replaces STATUS.md)
 state:
     @{{python}} "{{ai_max_dir}}/scripts/amx.py" --root . state
 
-# lean operating-model workflow CLI (new/check/eval/gaps/state) — see ~/repos/ai-max
+# lean operating-model workflow CLI (new/check/eval/gaps/state) - see ~/repos/ai-max
 amx *args:
     @{{python}} "{{ai_max_dir}}/scripts/amx.py" --root . {{args}}
 
@@ -71,6 +71,34 @@ docs-scan-prompt *args="":
 # Record a completed agent-run docs coherence scan
 docs-scan-record report high="0" medium="0" low="0" *args="":
     @{{python}} "{{ai_max_dir}}/scripts/amx.py" --root . docs-scan record --report {{report}} --high {{high}} --medium {{medium}} --low {{low}} {{args}}
+
+# Create a draft target-state delta for human approval
+delta-new slug:
+    @{{python}} "{{ai_max_dir}}/scripts/amx.py" --root . delta new {{slug}}
+
+# Create active materialization work from an approved delta
+materialize delta:
+    @{{python}} "{{ai_max_dir}}/scripts/amx.py" --root . materialize {{delta}}
+
+# Record an immutable proof run
+proof-record proof result report *args="":
+    @{{python}} "{{ai_max_dir}}/scripts/amx.py" --root . proof record --proof {{proof}} --result {{result}} --report {{report}} {{args}}
+
+# Show latest proof results
+proof-status *args="":
+    @{{python}} "{{ai_max_dir}}/scripts/amx.py" --root . proof status {{args}}
+
+# Validate PR classification: spec_delta, materialization, or chore
+pr-check type *args="":
+    @{{python}} "{{ai_max_dir}}/scripts/amx.py" --root . pr-check --type {{type}} {{args}}
+
+# Validate this repo against the shared ai-max orchestrator contract
+orchestrator-check *args="":
+    @{{python}} "{{ai_max_dir}}/scripts/amx.py" --root . orchestrator-check {{args}}
+
+# Print ordered framework adoption steps for this orchestrator
+upgrade-plan:
+    @{{python}} "{{ai_max_dir}}/scripts/amx.py" --root . orchestrator-check --upgrade-plan
 
 # Agent metrics: prompt count + agent runtime per session, signal only
 metrics *args="":

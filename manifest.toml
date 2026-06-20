@@ -7,7 +7,7 @@
 
 branch_prefix = "stark/"
 
-framework_version = "v7.1"
+framework_version = "v7.2"
 worktree_root = "workspace/"
 
 # Known overlaps where a task could plausibly belong to either repo. `just route`
