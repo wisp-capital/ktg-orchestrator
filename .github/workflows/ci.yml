@@ -1,0 +1,25 @@
+name: ci
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  orchestrator:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Checkout ai-max
+        uses: actions/checkout@v4
+        with:
+          repository: wisp-capital/ai-max
+          path: ai-max
+      - name: Orchestrator compliance
+        run: python3 ai-max/scripts/amx.py --root . orchestrator-check
