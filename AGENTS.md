@@ -37,6 +37,9 @@ just ship *args            # push + open PR(s) targeting <trunk>
 just teardown *args        # remove this session's worktrees
 just state                 # derived dashboard from specs/ (replaces STATUS.md)
 just amx new|check|eval    # scaffold / lint Specs; run a proof harness
+just context-audit         # check active context hygiene
+just docs-scan-status      # check semantic docs-scan freshness
+just metrics               # prompt count + agent runtime signal
 just nav-index / just nav-check   # regenerate / verify docs/navigation/*
 ```
 
@@ -105,28 +108,29 @@ leaving korpse untouched. See `docs/runbooks/missing-order.md`.
 ## AI-max operating model
 
 AI-max is the reusable framework; ktg-orchestrator is a consumer holding KTG work
-state on the **lean v6 model** (`framework_version` in `manifest.toml`). The
-model is two artifacts and one loop:
+state on the **lean v7.1 model** (`framework_version` in `manifest.toml`). Read
+`~/repos/ai-max/AGENTS.md` for the authoritative definitions. In short:
 
-- **A Spec** (`specs/SPEC-<slug>.md`) is the one unit of work — intent + scenarios
-  (each naming a runnable check) + inline decisions + embedded context +
-  per-feature constraints & tradeoffs. A big effort is a parent Spec with child
-  Specs. Elicit a Spec from rough intent with the bundled `amx-spec` skill (hard
-  rule 7); it is wired in via `.pi/settings.json`.
-- **A Proof** is the eval/tests that run the scenarios (`evals/<area>/`).
-  "Done" means the eval is green, not prose.
-- **State is derived** — `just state` generates the dashboard from Specs + git/PR
-  + eval reports. Do not hand-maintain `STATUS.md`.
+- **A Spec tree** defines target state: a System Spec, with optional Subsystem
+  and Feature Specs only when those children need their own proof/eval surface.
+- **Proof definitions and proof runs** state what compliance means and record
+  immutable evidence. Changing proof meaning is a Spec delta; fixing proof
+  execution without changing meaning is a chore.
+- **State is derived** — `just state` generates the dashboard from Specs, git/PR
+  state, proof records, and eval reports. Do not hand-maintain `STATUS.md`.
+- **Unowned behavior is a gap.** Behavior that exists outside an active Spec or
+  proof must be resolved by adding it to the Spec, adding a modified version to
+  the Spec, or killing it.
 - **Guardrails** — a Spec declares the irreversible actions it may take in
   `guardrails` (a list; `[]` = reversible-only). KTG work touches live trading,
   so real-money Specs set `guardrails = ["capital"]` + `capital_budget_usd` and
   must pass `check_capital_envelope.py` before any broker/order-routing
   connectivity and at auto-merge.
 
-The loop: write a Spec → human approves it (the one gate) → build in a worktree →
-eval green → merge. No separate diff-review gate; the eval is the implementation
-reviewer. A Spec is `proposed` until you approve it, then `building`, then `done`
-when merged + green (shown by `just state`).
+The loop: define target → define proof → approve the Spec delta → materialize
+compliance → CI green → merge as a milestone → proofs/evals run continuously
+until green end-to-end. Human approval applies to Spec deltas and architectural
+decisions, not every implementation diff.
 
 Startup for KTG work:
 
@@ -138,7 +142,13 @@ Startup for KTG work:
 5. **Route the task first:** `just route "<task>"`.
 6. Run `just state` — the derived dashboard (open / blocked / next / eval) is the
    whole picture. `just amx check` confirms Specs are well-formed.
-7. Run `just status` and assemble worktrees with `just assemble <slug>`.
+7. Run `just docs-scan-status --max-age-days 7` — if stale, generate the prompt
+   with `just docs-scan-prompt`, run the semantic scan, and record it with
+   `just docs-scan-record`.
+8. When changing Specs, evals, proof artifacts, materialization records, or
+   archived scan state, run `just context-audit`.
+9. Optional: `just metrics` — glance prompt count and agent runtime trends.
+10. Run `just status` and assemble worktrees with `just assemble <slug>`.
 
 ## Inbox (capture, review, batch-complete)
 
@@ -217,5 +227,5 @@ ship in `~/repos/ai-max/tools/`.
 
 ---
 
-Follows the lean operating model v6
+Follows the lean operating model v7.1
 (`~/repos/ai-max/docs/operating-model.md`).
