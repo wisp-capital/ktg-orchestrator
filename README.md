@@ -7,7 +7,7 @@ development, and ships changes back to each repo's origin as a pull request.
 
 It is **orchestration-only**: it stores no source code. The real source lives in
 each repo's own checkout listed in `manifest.toml`. ktg-orchestrator only holds a
-manifest, a Rust-based tool, and docs. Assembled worktrees land in `workspace/`
+manifest, framework command wiring, and docs. Assembled worktrees land in `workspace/`
 (gitignored) at runtime.
 
 ## Wrapped repos
@@ -45,33 +45,32 @@ just status
 just nav-index
 just nav-check
 just ship --draft
-just teardown --delete-branch
+just clean --force
 ```
 
-Without `just`, build and run the Rust tool directly:
+Without `just`, run the shared ai-max worktree assembler directly:
 ```sh
-cargo build --release
-./target/release/ktg-orchestrator assemble my-task --repo kotquant
-./target/release/ktg-orchestrator status
-./target/release/ktg-orchestrator ship --draft
-./target/release/ktg-orchestrator teardown --delete-branch
+python3 ~/repos/ai-max/tools/worktree-assembler.py assemble my-task --repo kotquant
+python3 ~/repos/ai-max/tools/worktree-assembler.py status
+python3 ~/repos/ai-max/tools/worktree-assembler.py ship
+python3 ~/repos/ai-max/tools/worktree-assembler.py clean --force
 ```
 
 ## How it works
 
 - `manifest.toml` lists each wrapped repo: local path, remote, base branch, lang.
 - `assemble <slug>` runs `git worktree add` in each source repo, creating
-  `workspace/<name>` on branch `stark/<slug>` from `origin/main`. Your primary
+  `workspace/<slug>/<name>` on branch `stark/<slug>` from `origin/main`. Your primary
   checkout is never touched.
-- `ship` pushes each branch and runs `gh pr create --base main --fill` from
-  inside the worktree, so the PR targets the right repo.
-- `teardown` removes the worktrees (add `--delete-branch` to drop the branch).
+- `ship` pushes dirty assembled branches; open PRs manually if the shared
+  assembler cannot infer the desired PR body.
+- `clean --force` removes stale or orphaned worktrees.
 
 ## AI-max operating state
 
 `/Users/alexcstark/repos/ai-max` is the reusable operating framework:
-Intent -> Scenarios -> Build -> Verify -> Archive, shallow/deep/spike
-classification, truth labels, maturity levels, and handoff patterns.
+Specs define target state, proofs define compliance, CI is the breakage gate,
+and the eval continuously reports completeness gaps.
 
 ktg-orchestrator holds the KTG-specific state for that framework:
 
@@ -86,6 +85,6 @@ Implementation work still happens in linked repo worktrees under `workspace/`.
 
 ## Requirements
 
-- Rust (latest stable)
+- Python 3.11+
 - `git`, `gh` (authenticated), and optionally `just`
 - The wrapped repos already cloned at the paths listed in `manifest.toml`
