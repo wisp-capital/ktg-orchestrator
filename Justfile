@@ -6,9 +6,9 @@ home := env_var_or_default("HOME", "/tmp")
 ai_max_dir := env_var_or_default("AI_MAX_DIR", home / "repos/ai-max")
 python := "python3"
 
-# Build the Rust routing tool
+# No local orchestrator binary is required; wrapped repos build in their own worktrees
 build:
-    cargo build --release
+    @echo "no local build"
 
 # Print AI-max startup context and cache it in .startup-snapshot.md
 startup:
@@ -16,11 +16,11 @@ startup:
 
 # Assemble worktrees for a task
 assemble slug *args:
-    cargo run --release -- assemble {{slug}} {{args}}
+    {{python}} "{{ai_max_dir}}/tools/worktree-assembler.py" assemble {{slug}} {{args}}
 
 # Show status of all wrapped repos
 status:
-    @cargo run --release -- status
+    @{{python}} "{{ai_max_dir}}/tools/worktree-assembler.py" status
 
 # Clone/pull every primary checkout listed in manifest.toml
 pull-all:
@@ -40,13 +40,13 @@ route query *args:
 
 # Ship changes (push + open PRs)
 ship *args:
-    cargo run --release -- ship {{args}}
+    {{python}} "{{ai_max_dir}}/tools/worktree-assembler.py" ship {{args}}
 
-# Teardown worktrees
-teardown *args:
-    cargo run --release -- teardown {{args}}
+# Clean stale or orphaned worktrees
+clean *args="":
+    {{python}} "{{ai_max_dir}}/tools/worktree-assembler.py" clean {{args}}
 
-# --- ai-max workflow CLI (lean v7.2) ---
+# --- ai-max workflow CLI (lean v7.4) ---
 
 # derived state dashboard from specs/ + eval reports (replaces STATUS.md)
 state:
@@ -87,6 +87,34 @@ proof-record proof result report *args="":
 # Show latest proof results
 proof-status *args="":
     @{{python}} "{{ai_max_dir}}/scripts/amx.py" --root . proof status {{args}}
+
+# Report Specs at the proof-green / gap-closed human-review threshold
+proof-threshold *args="":
+    @{{python}} "{{ai_max_dir}}/scripts/amx.py" --root . proof threshold {{args}}
+
+# Scaffold a proof definition for a Spec
+proof-new proof *args="":
+    @{{python}} "{{ai_max_dir}}/scripts/amx.py" --root . proof new {{proof}} {{args}}
+
+# Run a proof harness for an eval area
+eval area *args="":
+    @{{python}} "{{ai_max_dir}}/scripts/amx.py" --root . eval {{area}} {{args}}
+
+# Run a scanner adapter and record canonical eval gaps
+scan kind area *args="":
+    @{{python}} "{{ai_max_dir}}/scripts/amx.py" --root . scan {{kind}} {{area}} {{args}}
+
+# Track eval gaps and update generated gap state
+gaps area *args="":
+    @{{python}} "{{ai_max_dir}}/scripts/amx.py" --root . gaps {{area}} {{args}}
+
+# Emit, dry-run, execute, or PR-sync corrective-action packets for eligible unguarded gaps
+dispatch area *args="":
+    @{{python}} "{{ai_max_dir}}/scripts/amx.py" --root . dispatch {{area}} {{args}}
+
+# Run one eval -> gaps -> dispatch pass; schedule externally for cadence
+loop area *args="":
+    @{{python}} "{{ai_max_dir}}/scripts/amx.py" --root . loop {{area}} {{args}}
 
 # Validate PR classification: spec_delta, materialization, or chore
 pr-check type *args="":

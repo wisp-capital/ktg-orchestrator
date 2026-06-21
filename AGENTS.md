@@ -34,7 +34,7 @@ just route "<task>"        # cheap first call: which repo(s) does this task belo
 just assemble <slug> [--repo <name>]   # workspace/<slug>/<repo> on ktg/<slug> from origin/<trunk>
 just status                # per-repo branch / dirty / ahead-behind
 just ship *args            # push + open PR(s) targeting <trunk>
-just teardown *args        # remove this session's worktrees
+just clean *args           # remove stale/orphaned worktrees
 just state                 # derived dashboard from specs/ (replaces STATUS.md)
 just amx new|check|eval    # scaffold / lint Specs; run a proof harness
 just context-audit         # check active context hygiene
@@ -43,9 +43,8 @@ just metrics               # prompt count + agent runtime signal
 just nav-index / just nav-check   # regenerate / verify docs/navigation/*
 ```
 
-The routing tool itself is a Rust binary in this repo (`cargo build --release`);
-`just assemble/status/ship/teardown` run it. Run `just` (no args) to list all
-recipes.
+Worktree assembly/status/ship/clean use the shared ai-max worktree assembler.
+Run `just` (no args) to list all recipes.
 
 ## Wrapped repos (source of truth: `manifest.toml`)
 
@@ -108,7 +107,7 @@ leaving korpse untouched. See `docs/runbooks/missing-order.md`.
 ## AI-max operating model
 
 AI-max is the reusable framework; ktg-orchestrator is a consumer holding KTG work
-state on the **lean v7.2 model** (`framework_version` in `manifest.toml`). Read
+state on the **lean v7.4 model** (`framework_version` in `manifest.toml`). Read
 `~/repos/ai-max/AGENTS.md` for the authoritative definitions. In short:
 
 - **A Spec tree** defines target state: a System Spec, with optional Subsystem
@@ -227,5 +226,5 @@ ship in `~/repos/ai-max/tools/`.
 
 ---
 
-Follows the lean operating model v7.2
+Follows the lean operating model v7.4
 (`~/repos/ai-max/docs/operating-model.md`).
