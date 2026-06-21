@@ -1,9 +1,9 @@
 # Specs — the one work artifact
 
-A **Spec** is one unit of work: `specs/SPEC-<slug>.md`. It is the decision and
-the contract. Format and full model: ai-max `templates/SPEC.template.md` and
+A **Spec** is one target-state record: `specs/<slug>.spec.md`. It is the decision and
+the contract. Format and full model: ai-max `templates/template.spec.md` and
 `docs/operating-model.md`. Scaffold one with `just amx new <slug>`; elicit one
-from rough intent with the bundled `amx-spec` skill (hard rule 7).
+from rough intent with the bundled `amx-spec` skill (hard rule 8).
 
 A Spec has a `+++`-fenced TOML frontmatter (the machine surface) and prose below
 (`## Intent`, `## Scenarios`, `## Decisions`, `## Constraints & Tradeoffs`,
