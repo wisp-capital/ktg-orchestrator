@@ -36,7 +36,7 @@ just status                # per-repo branch / dirty / ahead-behind
 just ship *args            # push + open PR(s) targeting <trunk>
 just clean *args           # remove stale/orphaned worktrees
 just state                 # derived dashboard from specs/ (replaces STATUS.md)
-just amx new|check|eval    # scaffold / lint Specs; run a proof harness
+just amx new|check|eval    # scaffold / lint Specs; run scenario/eval checks
 just context-audit         # check active context hygiene
 just docs-scan-status      # check semantic docs-scan freshness
 just metrics               # prompt count + agent runtime signal
@@ -107,29 +107,30 @@ leaving korpse untouched. See `docs/runbooks/missing-order.md`.
 ## AI-max operating model
 
 AI-max is the reusable framework; ktg-orchestrator is a consumer holding KTG work
-state on the **lean v7.4 model** (`framework_version` in `manifest.toml`). Read
+state on the **lean v7.7 model** (`framework_version` in `manifest.toml`). Read
 `~/repos/ai-max/AGENTS.md` for the authoritative definitions. In short:
 
 - **A Spec tree** defines target state: a System Spec, with optional Subsystem
-  and Feature Specs only when those children need their own proof/eval surface.
-- **Proof definitions and proof runs** state what compliance means and record
-  immutable evidence. Changing proof meaning is a Spec delta; fixing proof
+  and Feature Specs only when those children need their own scenario/eval
+  surface.
+- **Inline scenarios and run records** state what compliance means and record
+  immutable evidence. Changing scenario meaning is a Spec delta; fixing check
   execution without changing meaning is a chore.
 - **State is derived** — `just state` generates the dashboard from Specs, git/PR
-  state, proof records, and eval reports. Do not hand-maintain `STATUS.md`.
+  state, run records, and eval reports. Do not hand-maintain `STATUS.md`.
 - **Unowned behavior is a gap.** Behavior that exists outside an active Spec or
-  proof must be resolved by adding it to the Spec, adding a modified version to
-  the Spec, or killing it.
+  scenario must be resolved by adding it to the Spec, adding a modified version
+  to the Spec, or killing it.
 - **Guardrails** — a Spec declares the irreversible actions it may take in
   `guardrails` (a list; `[]` = reversible-only). KTG work touches live trading,
   so real-money Specs set `guardrails = ["capital"]` + `capital_budget_usd` and
   must pass `check_capital_envelope.py` before any broker/order-routing
   connectivity and at auto-merge.
 
-The loop: define target → define proof → approve the Spec delta → materialize
-compliance → CI green → merge as a milestone → proofs/evals run continuously
-until green end-to-end. Human approval applies to Spec deltas and architectural
-decisions, not every implementation diff.
+The loop: define target → define scenarios and needs → approve the Spec delta →
+materialize compliance → CI green → merge as a milestone → scenarios/evals run
+continuously until green end-to-end. Human approval applies to Spec deltas and
+architectural decisions, not every implementation diff.
 
 Startup for KTG work:
 
@@ -144,7 +145,7 @@ Startup for KTG work:
 7. Run `just docs-scan-status --max-age-days 7` — if stale, generate the prompt
    with `just docs-scan-prompt`, run the semantic scan, and record it with
    `just docs-scan-record`.
-8. When changing Specs, evals, proof artifacts, materialization records, or
+8. When changing Specs, evals, run records, materialization records, or
    archived scan state, run `just context-audit`.
 9. Optional: `just metrics` — glance prompt count and agent runtime trends.
 10. Run `just status` and assemble worktrees with `just assemble <slug>`.
@@ -190,6 +191,36 @@ at once and propose: **promote-to-real-work** (via the existing
 `ideas/` → INIT → Spec path — see `ideas/README.md`), **keep** (still blocked),
 or **drop**. Stamp with `inbox.py reviewed --weekly`.
 
+## Prompt scratch workspace
+
+Use `.amx/prompts/` for ad hoc prompt handoffs that need to survive source
+worktree or branch churn but should not become committed project state. The
+directory is gitignored and not committed. Scratch prompts are not an Inbox,
+reminder, dispatch packet, Spec, delta, or materialization record; they are
+plain Markdown prompts kept until manually removed.
+
+When the human asks to save a prompt for another session, write it through the
+shared `amx prompt` command in this primary orchestrator repo:
+
+```text
+python3 ~/repos/ai-max/scripts/amx.py --root . prompt save "<title>" --stdin
+python3 ~/repos/ai-max/scripts/amx.py --root . prompt save "<title>" --body "<prompt text>"
+```
+
+When the human asks to load a prompt, list and show it from this same workspace:
+
+```text
+python3 ~/repos/ai-max/scripts/amx.py --root . prompt list
+python3 ~/repos/ai-max/scripts/amx.py --root . prompt show <prompt-id>
+```
+
+Remove scratch prompts only when asked, or when the task explicitly includes
+cleanup:
+
+```text
+python3 ~/repos/ai-max/scripts/amx.py --root . prompt rm <prompt-id>
+```
+
 ## Rules
 
 - **All work happens in worktrees on branches.** The primary `main` checkout is a
@@ -226,5 +257,5 @@ ship in `~/repos/ai-max/tools/`.
 
 ---
 
-Follows the lean operating model v7.4
+Follows the lean operating model v7.7
 (`~/repos/ai-max/docs/operating-model.md`).
