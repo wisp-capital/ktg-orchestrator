@@ -46,11 +46,15 @@ ship *args:
 clean *args="":
     {{python}} "{{ai_max_dir}}/tools/worktree-assembler.py" clean {{args}}
 
-# --- ai-max workflow CLI (lean v7.4) ---
+# --- ai-max workflow CLI (lean v7.7) ---
 
 # derived state dashboard from specs/ + eval reports (replaces STATUS.md)
 state:
     @{{python}} "{{ai_max_dir}}/scripts/amx.py" --root . state
+
+# Inspect the authoritative generated-state root
+state-root *args="":
+    @{{python}} "{{ai_max_dir}}/scripts/amx.py" --root . state-root status {{args}}
 
 # lean operating-model workflow CLI (new/check/eval/gaps/state) - see ~/repos/ai-max
 amx *args:
@@ -72,6 +76,22 @@ docs-scan-prompt *args="":
 docs-scan-record report high="0" medium="0" low="0" *args="":
     @{{python}} "{{ai_max_dir}}/scripts/amx.py" --root . docs-scan record --report {{report}} --high {{high}} --medium {{medium}} --low {{low}} {{args}}
 
+# Save a scratch prompt handoff under .amx/prompts/ (pass --stdin or --body)
+prompt-save title *args="":
+    @{{python}} "{{ai_max_dir}}/scripts/amx.py" --root . prompt save "{{title}}" {{args}}
+
+# List scratch prompt handoffs
+prompt-list:
+    @{{python}} "{{ai_max_dir}}/scripts/amx.py" --root . prompt list
+
+# Show one scratch prompt handoff
+prompt-show prompt_id:
+    @{{python}} "{{ai_max_dir}}/scripts/amx.py" --root . prompt show {{prompt_id}}
+
+# Remove one scratch prompt handoff
+prompt-rm prompt_id:
+    @{{python}} "{{ai_max_dir}}/scripts/amx.py" --root . prompt rm {{prompt_id}}
+
 # Create a draft target-state delta for human approval
 delta-new slug:
     @{{python}} "{{ai_max_dir}}/scripts/amx.py" --root . delta new {{slug}}
@@ -79,6 +99,18 @@ delta-new slug:
 # Create active materialization work from an approved delta
 materialize delta:
     @{{python}} "{{ai_max_dir}}/scripts/amx.py" --root . materialize {{delta}}
+
+# Run a scenario check and record the result
+run spec scenario *args="":
+    @{{python}} "{{ai_max_dir}}/scripts/amx.py" --root . run {{spec}} {{scenario}} {{args}}
+
+# Show latest scenario run results
+run-status *args="":
+    @{{python}} "{{ai_max_dir}}/scripts/amx.py" --root . run status {{args}}
+
+# Report Specs at the scenario-green / gap-closed human-review threshold
+run-threshold *args="":
+    @{{python}} "{{ai_max_dir}}/scripts/amx.py" --root . run threshold {{args}}
 
 # Record an immutable proof run
 proof-record proof result report *args="":

@@ -7,8 +7,11 @@
 
 branch_prefix = "stark/"
 
-framework_version = "v7.4"
+framework_version = "v7.7"
 worktree_root = "workspace/"
+
+[amx]
+state_root = "~/.local/state/ktg-orchestrator"
 
 # Known overlaps where a task could plausibly belong to either repo. `just route`
 # surfaces the matching rule when its top two candidates are exactly this pair.

@@ -48,6 +48,11 @@ just ship --draft
 just clean --force
 ```
 
+Scratch prompt handoffs live under `.amx/prompts/`, which is gitignored and
+independent of wrapped source worktrees. Use `just prompt-save "title" --stdin`,
+`just prompt-list`, `just prompt-show <prompt-id>`, and `just prompt-rm
+<prompt-id>` for ad hoc prompts that another session should load later.
+
 Without `just`, run the shared ai-max worktree assembler directly:
 ```sh
 python3 ~/repos/ai-max/tools/worktree-assembler.py assemble my-task --repo kotquant
@@ -68,13 +73,13 @@ python3 ~/repos/ai-max/tools/worktree-assembler.py clean --force
 
 ## AI-max operating state
 
-`/Users/alexcstark/repos/ai-max` is the reusable operating framework:
-Specs define target state, proofs define compliance, CI is the breakage gate,
-and the eval continuously reports completeness gaps.
+`/Users/alexcstark/repos/ai-max` is the reusable operating framework: Specs
+define target state, inline scenarios define compliance, CI is the breakage
+gate, and the eval continuously reports completeness gaps.
 
 ktg-orchestrator holds the KTG-specific state for that framework:
 
-- `just state` is the derived dashboard for active Spec and proof state.
+- `just state` is the derived dashboard for active Spec and scenario/run state.
 - `STATUS.md` is retained only as legacy transition context until all stale rows
   have been retired.
 - Legacy work artifacts and deep-work handoffs are historical context unless a

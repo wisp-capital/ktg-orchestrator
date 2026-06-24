@@ -1,5 +1,6 @@
 /target/
 /workspace/
+.amx/prompts/
 Cargo.lock
 .startup-snapshot.md
 __pycache__/
