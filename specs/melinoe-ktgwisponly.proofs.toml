@@ -1,0 +1,72 @@
+id = "melinoe-ktgwisponly"
+status = "active"
+system = "melinoe-ktgwisponly"
+level = "system"
+guardrails = ["capital"]
+capital_budget_usd = 75000
+eval = ""
+parent = ""
+children = []
+next = "Merge the strategy and routing PRs, run the capital envelope check, then deploy ktg_wisponly."
+target = "Melinoe runs live on KTG WispOnly through the Icarus account within the existing $75,000 max-position envelope."
+out_of_scope = [
+  "Raising KTG account limits",
+  "Adding Melinoe to WBE/shared accounts",
+  "Bypassing the standard epyc deploy script",
+]
+links = [
+  "https://github.com/wisp-capital/wisp-strategies/pull/63",
+  "https://github.com/wisp-capital/kotquant/pull/3013",
+]
+version_v1 = "Melinoe is available in the live Wisp jar and routed to Icarus on ktg_wisponly."
+version_v2plus = ""
+version_out_of_scope = "No live scale-up beyond the existing Icarus maxPositionValue."
+
+[[scenario]]
+id = "SCN-LIVE-001"
+capability = "capital"
+title = "Capital envelope permits the Icarus rollout"
+want = "The declared $75,000 live notional is within the Spec's capital guardrail."
+check = "python3 /Users/alexcstark/repos/ai-max/scripts/check_capital_envelope.py --spec specs/melinoe-ktgwisponly.spec.md --notional 75000"
+kind = "live"
+needs = []
+version = "v1"
+
+[[scenario]]
+id = "SCN-LIVE-002"
+capability = "live-routing"
+title = "Melinoe is wired to KTG WispOnly Icarus"
+want = "Kotquant includes Melinoe in KtgWispOnlyStrategies and maps the strategy ref to the Icarus account."
+check = "test -f ../kotquant-melinoe-icarus/wisp/src/main/kotlin/org/wisp/defs/KtgWispOnlyStrategies.kt && test -f ../kotquant-melinoe-icarus/stratio/src/main/kotlin/org/wisp/stratio/services/ktg/KtgStrategyAllocator.kt && rg -q 'Melinoe\\(1000\\.asRisk\\(\\)\\)' ../kotquant-melinoe-icarus/wisp/src/main/kotlin/org/wisp/defs/KtgWispOnlyStrategies.kt && rg -q '\"Melinoe\" to listOf\\(Icarus\\)' ../kotquant-melinoe-icarus/stratio/src/main/kotlin/org/wisp/stratio/services/ktg/KtgStrategyAllocator.kt"
+kind = "integration"
+needs = ["melinoe-ktgwisponly/SCN-LIVE-001"]
+version = "v1"
+
+[[implementation]]
+id = "I-001"
+role = "strategy implementation"
+paths = [
+  "../wisp-strategies-melinoe-icarus/src/main/kotlin/org/wisp/strategies/open/smallcap/Melinoe.kt",
+]
+tests = []
+checks = [
+  "./gradlew :strategies:wisp-strategies:check :stratio:compileKotlin :wisp:compileKotlin shadowJarLive --no-daemon --console=plain",
+]
+artifacts = [
+  "trx50:/mnt/backtests/Melinoe/2026-07-05T08-59-57_Melinoe_trx50_e48be369",
+]
+scenarios = ["SCN-LIVE-001", "SCN-LIVE-002"]
+
+[[implementation]]
+id = "I-002"
+role = "KTG WispOnly routing"
+paths = [
+  "../kotquant-melinoe-icarus/wisp/src/main/kotlin/org/wisp/defs/KtgWispOnlyStrategies.kt",
+  "../kotquant-melinoe-icarus/stratio/src/main/kotlin/org/wisp/stratio/services/ktg/KtgStrategyAllocator.kt",
+]
+tests = []
+checks = [
+  "just deploy ktg_wisponly",
+]
+artifacts = []
+scenarios = ["SCN-LIVE-002"]
