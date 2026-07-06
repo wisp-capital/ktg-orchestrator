@@ -44,6 +44,7 @@ id = "I-001"
 role = "strategy implementation"
 paths = [
   "../wisp-strategies-ogden-charon/src/main/kotlin/org/wisp/strategies/open/smallcap/Charon.kt",
+  "../wisp-strategies-ogden-charon/src/main/kotlin/org/wisp/patterns/ThirtyMinuteRunnerPattern.kt",
 ]
 tests = []
 checks = [
