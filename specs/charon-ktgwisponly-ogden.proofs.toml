@@ -1,0 +1,69 @@
+id = "charon-ktgwisponly-ogden"
+status = "active"
+system = "charon-ktgwisponly-ogden"
+level = "system"
+guardrails = ["capital"]
+capital_budget_usd = 150000
+eval = ""
+parent = ""
+children = []
+next = "Merge the strategy and routing PRs, run the capital envelope check, then deploy ktg_wisponly."
+target = "Charon runs live on KTG WispOnly through the Ogden account at $500 base risk within the existing $150,000 max-position envelope."
+out_of_scope = [
+  "Raising KTG account limits",
+  "Adding Charon to WBE/shared accounts",
+  "Bypassing the standard epyc deploy script",
+]
+links = []
+version_v1 = "Charon is available in the live Wisp jar and routed to Ogden on ktg_wisponly."
+version_v2plus = ""
+version_out_of_scope = "No live scale-up beyond the existing Ogden maxPositionValue."
+
+[[scenario]]
+id = "SCN-LIVE-001"
+capability = "capital"
+title = "Capital envelope permits the Ogden rollout"
+want = "The declared $150,000 live notional is within the Spec's capital guardrail."
+check = "python3 /Users/alexcstark/repos/ai-max/scripts/check_capital_envelope.py --spec specs/charon-ktgwisponly-ogden.spec.md --notional 150000"
+kind = "live"
+needs = []
+version = "v1"
+
+[[scenario]]
+id = "SCN-LIVE-002"
+capability = "live-routing"
+title = "Charon is wired to KTG WispOnly Ogden"
+want = "Kotquant includes Charon at $500 base risk in KtgWispOnlyStrategies and maps the strategy ref to the Ogden account."
+check = "test -f ../kotquant-ogden-charon/wisp/src/main/kotlin/org/wisp/defs/KtgWispOnlyStrategies.kt && test -f ../kotquant-ogden-charon/stratio/src/main/kotlin/org/wisp/stratio/services/ktg/KtgStrategyAllocator.kt && rg -q 'Charon\\(500\\.asRisk\\(\\)\\)' ../kotquant-ogden-charon/wisp/src/main/kotlin/org/wisp/defs/KtgWispOnlyStrategies.kt && rg -q '\"Charon\" to listOf\\(Ogden\\)' ../kotquant-ogden-charon/stratio/src/main/kotlin/org/wisp/stratio/services/ktg/KtgStrategyAllocator.kt"
+kind = "integration"
+needs = ["charon-ktgwisponly-ogden/SCN-LIVE-001"]
+version = "v1"
+
+[[implementation]]
+id = "I-001"
+role = "strategy implementation"
+paths = [
+  "../wisp-strategies-ogden-charon/src/main/kotlin/org/wisp/strategies/open/smallcap/Charon.kt",
+]
+tests = []
+checks = [
+  "./gradlew :strategies:wisp-strategies:check :stratio:compileKotlin :wisp:compileKotlin :wisp:shadowJarLive --no-daemon --console=plain",
+]
+artifacts = [
+  "trx50:/mnt/backtests/Charon/2026-07-05T20-50-26_Charon_trx50_6f87e69d",
+]
+scenarios = ["SCN-LIVE-001", "SCN-LIVE-002"]
+
+[[implementation]]
+id = "I-002"
+role = "KTG WispOnly routing"
+paths = [
+  "../kotquant-ogden-charon/wisp/src/main/kotlin/org/wisp/defs/KtgWispOnlyStrategies.kt",
+  "../kotquant-ogden-charon/stratio/src/main/kotlin/org/wisp/stratio/services/ktg/KtgStrategyAllocator.kt",
+]
+tests = []
+checks = [
+  "just deploy ktg_wisponly",
+]
+artifacts = []
+scenarios = ["SCN-LIVE-002"]
