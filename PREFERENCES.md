@@ -15,3 +15,4 @@ holds only KTG-specific tradeoffs.
 | P-006 | **Map, don't copy.** When documenting the system here, point at the authoritative per-repo doc; do not restate field-level contracts that can drift (`korpse/docs/signal-flow.md` owns signal semantics). |
 | P-007 | **Never guess a live credential.** `KORE_LOG_PASSWORD` for `--env live` comes from the user / vault; `--env fwd` uses the documented value `access`. |
 | P-008 | **Fix signal/order behavior in kotquant, not korpse, when possible** — korpse script promotion is painful, so prefer changing signal generation upstream. See AGENTS.md "Where to fix signal / order behavior". |
+| P-009 | **Equity / auction research edges: cents per share, not bps.** Kill-check and report in ¢/share; fee friction ≈ **3 mils/share**, not a notional-% or bps haircut. A few bps on mid/large names is several cents and can survive mils while looking dead in bps. |
