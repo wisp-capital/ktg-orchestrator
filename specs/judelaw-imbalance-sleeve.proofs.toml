@@ -1,0 +1,93 @@
+id = "judelaw-imbalance-sleeve"
+status = "draft"
+system = "judelaw-imbalance-sleeve"
+level = "system"
+guardrails = ["capital"]
+capital_budget_usd = 75000
+eval = ""
+parent = ""
+children = []
+next = "Land kotquant + infra + a1-strategies PRs, prove SCN-LIVE-001/002/003, deploy ktg_wisponly and kore-scheduler."
+target = "JudeLaw runs a coherent auction/imbalance sleeve (close continuation, close convergence, open fade) sized into the existing $75,000 max-position envelope, with Kore available from early premarket."
+out_of_scope = [
+  "Raising JudeLaw account limits",
+  "Wiring JudeLawV2 / HughGrant / TransitV2 / BrintDavy as live siblings",
+  "Close-fade strategy without an event study",
+  "Dedicated ISP-over-CAC conflict gate beyond TargetState dedup",
+]
+links = []
+version_v1 = "Three JudeLaw aliases live on ktg_wisponly; Kore schedule early-premarket; capital envelope $75k."
+version_v2plus = "Conflict gate; close-fade after event study; size OpeningAuction up after live liquidity proof."
+version_out_of_scope = "No live scale-up beyond existing JudeLaw maxPositionValue in V1."
+
+[[scenario]]
+id = "SCN-LIVE-001"
+capability = "capital"
+title = "Capital envelope permits the JudeLaw sleeve rollout"
+want = "The declared $75,000 live notional is within the Spec's capital guardrail."
+check = "python3 /Users/alexcstark/repos/ai-max/scripts/check_capital_envelope.py --spec specs/judelaw-imbalance-sleeve.spec.md --notional 75000"
+kind = "live"
+needs = []
+version = "v1"
+
+[[scenario]]
+id = "SCN-LIVE-002"
+capability = "live-routing"
+title = "JudeLaw imbalance aliases are wired to the JudeLaw shell"
+want = "KtgWispOnlyStrategies includes the three JudeLaw aliases and the allocator maps each to JudeLaw."
+check = "test -f workspace/judelaw-imbalance-sleeve/kotquant/wisp/src/main/kotlin/org/wisp/defs/KtgWispOnlyStrategies.kt && rg -q 'JudeLawImbalanceSellPressure' workspace/judelaw-imbalance-sleeve/kotquant/wisp/src/main/kotlin/org/wisp/defs/KtgWispOnlyStrategies.kt && rg -q 'JudeLawClosingAuctionConvergence' workspace/judelaw-imbalance-sleeve/kotquant/wisp/src/main/kotlin/org/wisp/defs/KtgWispOnlyStrategies.kt && rg -q 'JudeLawOpeningAuctionConvergence' workspace/judelaw-imbalance-sleeve/kotquant/wisp/src/main/kotlin/org/wisp/defs/KtgWispOnlyStrategies.kt && rg -q '\"JudeLawOpeningAuctionConvergence\" to listOf\\(JudeLaw\\)' workspace/judelaw-imbalance-sleeve/kotquant/stratio/src/main/kotlin/org/wisp/stratio/services/ktg/KtgStrategyAllocator.kt"
+kind = "integration"
+needs = ["judelaw-imbalance-sleeve/SCN-LIVE-001"]
+version = "v1"
+
+[[scenario]]
+id = "SCN-LIVE-003"
+capability = "schedule"
+title = "JudeLaw Kore worker starts at early premarket"
+want = "JudeLaw schedule entry starts at 06:00 ET (not 15:00-only) so open-fade can execute."
+check = "python3 -c \"from pathlib import Path; t=Path('workspace/judelaw-imbalance-sleeve/infra/machines/trx50/kore-scheduler/scheduler/entries.py').read_text(); i=t.find('\\\"JudeLaw\\\"'); c=t[i:i+400]; assert 'EARLY_PREMARKET_OPEN' in c and 'time(15, 0)' not in c\""
+kind = "integration"
+needs = ["judelaw-imbalance-sleeve/SCN-LIVE-001"]
+version = "v1"
+
+[[implementation]]
+id = "I-001"
+role = "strategy implementations"
+paths = [
+  "../a1-strategies/src/main/kotlin/org/wisp/strategies/a1/prod/ImbalanceSellPressure.kt",
+  "../a1-strategies/src/main/kotlin/org/wisp/strategies/a1/prod/ClosingAuctionConvergence.kt",
+  "../a1-strategies/src/main/kotlin/org/wisp/strategies/a1/prod/OpeningAuctionConvergence.kt",
+]
+tests = []
+checks = []
+artifacts = []
+scenarios = ["SCN-LIVE-001", "SCN-LIVE-002"]
+
+[[implementation]]
+id = "I-002"
+role = "KTG WispOnly routing"
+paths = [
+  "workspace/judelaw-imbalance-sleeve/kotquant/wisp/src/main/kotlin/org/wisp/defs/KtgWispOnlyStrategies.kt",
+  "workspace/judelaw-imbalance-sleeve/kotquant/stratio/src/main/kotlin/org/wisp/stratio/services/ktg/KtgStrategyAllocator.kt",
+]
+tests = [
+  "workspace/judelaw-imbalance-sleeve/kotquant/wisp/src/test/kotlin/org/wisp/defs/KtgStrategyWiringTest.kt",
+]
+checks = [
+  "just deploy ktg_wisponly",
+]
+artifacts = []
+scenarios = ["SCN-LIVE-002"]
+
+[[implementation]]
+id = "I-003"
+role = "JudeLaw Kore schedule"
+paths = [
+  "workspace/judelaw-imbalance-sleeve/infra/machines/trx50/kore-scheduler/scheduler/entries.py",
+]
+tests = [
+  "workspace/judelaw-imbalance-sleeve/infra/machines/trx50/kore-scheduler/tests/test_schedule.py",
+]
+checks = []
+artifacts = []
+scenarios = ["SCN-LIVE-003"]
