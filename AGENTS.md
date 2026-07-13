@@ -104,6 +104,23 @@ sign issue (positive `quantity` published for a short → korpse
 `invalid_target`) was fixed in kotquant by publishing a signed increase quantity,
 leaving korpse untouched. See `docs/runbooks/missing-order.md`.
 
+### Deploying + forward-testing a korpse change
+
+When a change genuinely must live in korpse, the deploy → test → verify loop runs on
+the **ForwardTest** Kore (all `kti` on **trx50**) and is three skills + a runbook:
+
+- **`korpse-deploy <branch>`** — clean-worktree deploy → `just upload`/`build` → verify
+  the uploaded source → (re)start the fwd instance on shell `StarkFwdTest1` (NEVER
+  `Default` — it fans out to live accounts).
+- **`korpse-fwd-test --test <name>`** — run a `test_forward.py` case against korpsev4.
+- **`kore-logs --env fwd --account 203607 --grep <SYM>`** — verify the worker log
+  (`entry_accept` / `order_submit` / `order_fill`).
+
+Full sequence + the gotchas (new-header bundler section metadata, deploy from a clean
+worktree not the dirty primary, the non-existent `kti einstein sync-script`, the
+`autoMode.allow` kti grant, relay-only fwd log host, RTH/Passive fill dependence):
+[`docs/runbooks/korpse-deploy-and-forward-test.md`](docs/runbooks/korpse-deploy-and-forward-test.md).
+
 ## AI-max operating model
 
 AI-max is the reusable framework; ktg-orchestrator is a consumer holding KTG work
