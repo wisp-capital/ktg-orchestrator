@@ -27,6 +27,15 @@ points at `~/repos/ai-max/skills`. Use `amx-spec` to author a Spec.
   code. The real source lives in each repo's own checkout listed in
   `manifest.toml`.
 
+**Multi-repo changes go through the assembler, not hand-rolled worktrees.** When
+a task spans repos (e.g. the kotquant + korpse TWAP work), assemble them together
+with `just assemble <slug> [--repo <name>]` and ship them with `just ship`
+(one PR per repo) instead of `git worktree add` by hand. Assembled worktrees now
+auto-repair their cross-repo relative symlinks (re-pointed to absolute against
+the primary checkout), so kotquant's `strategies/wisp-strategies` resolves and
+the `:wisp` Gradle module builds and tests inside the worktree. If a worktree was
+created some other way and `:wisp` is missing, run `just fix-symlinks <slug>`.
+
 ## Quick reference
 
 ```text

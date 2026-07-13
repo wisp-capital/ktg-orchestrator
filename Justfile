@@ -42,6 +42,10 @@ route query *args:
 ship *args:
     {{python}} "{{ai_max_dir}}/tools/worktree-assembler.py" ship {{args}}
 
+# Re-point relative symlinks in a slug's assembled worktrees to absolute (fixes kotquant :wisp)
+fix-symlinks slug:
+    {{python}} "{{ai_max_dir}}/tools/worktree-assembler.py" fix-symlinks {{slug}}
+
 # Clean stale or orphaned worktrees
 clean *args="":
     {{python}} "{{ai_max_dir}}/tools/worktree-assembler.py" clean {{args}}
