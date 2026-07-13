@@ -16,14 +16,14 @@ allocator routes its strategy ref to the existing Ogden KTG shell/account.
 | Charon | Open small-cap parabolic backside short strategy recreated from the old hub-rs Ogden behavior. |
 | KTG WispOnly | Personal KTG broker instance deployed by `just deploy ktg_wisponly`. |
 | Ogden account | Existing KTG account/shell for this rollout; Gr8Trade account `14448`. |
-| Base risk | Strategy sizing input. This rollout uses `Charon(500.asRisk())`. |
+| Base risk | Strategy sizing input. This rollout uses `Charon(2500.asRisk())`. |
 | Capital envelope | Maximum single-position live notional permitted for this rollout. |
 
 ## Capability Model
 
 ### Live Routing
 
-- `Charon(500.asRisk())` is present in `KtgWispOnlyStrategies`.
+- `Charon(2500.asRisk())` is present in `KtgWispOnlyStrategies`.
 - Strategy ref `Charon` maps to the Ogden KTG shell/account.
 - Deployment uses the standard epyc deploy script, which pulls committed `main`
   from `wisp-strategies` and `kotquant` before building the live jar.
