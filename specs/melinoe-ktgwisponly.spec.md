@@ -22,7 +22,7 @@ allocator routes its strategy ref to the existing Icarus KTG shell/account.
 
 ### Live Routing
 
-- `Melinoe(1000.asRisk())` is present in `KtgWispOnlyStrategies`.
+- `Melinoe(2500.asRisk())` is present in `KtgWispOnlyStrategies`.
 - Strategy ref `Melinoe` maps to the Icarus KTG shell/account.
 - Deployment uses the standard epyc deploy script, which pulls committed `main`
   from `wisp-strategies` and `kotquant` before building the live jar.
