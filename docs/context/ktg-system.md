@@ -5,9 +5,11 @@ trade, emits a signal, and that signal becomes a real order on the external **Ko
 trading platform. This document is the map: what the pieces are, where they live, how
 a signal becomes an order, and where to look when one doesn't.
 
-`ktg-orchestrator` stores no source — it coordinates the three repos below. The code
-lives in each repo's own checkout (see `manifest.toml`). This map points into those
-repos; it does **not** restate their contracts (that would drift). The
+`ktg-orchestrator` stores no source — it coordinates the three trading repos below.
+The code lives in each repo's own checkout (see `manifest.toml`). The manifest also
+includes the shared `infra` and `ai-max` checkouts for infrastructure and framework
+work; they are intentionally outside this signal-to-order map. This map points into
+the trading repos; it does **not** restate their contracts (that would drift). The
 **authoritative sources** are listed at the bottom — read them for field-level detail.
 
 ## Components

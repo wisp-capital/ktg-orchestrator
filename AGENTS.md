@@ -62,6 +62,8 @@ Run `just` (no args) to list all recipes.
 | `kotquant` | `main` | kotlin | KTG signal generation and upstream trading behavior |
 | `kore-proxy` | `main` | rust | Kore return path and proxy for execution events |
 | `korpse` | `main` | cpp | Kore strategy executor and trade-plan state machine |
+| `infra` | `main` | config | Infrastructure configuration and cleanup automation shared with Wisp |
+| `ai-max` | `main` | python | Reusable AI Max framework and shared orchestration tooling |
 
 The `trunk` field in `manifest.toml` is the single source of truth — assemble
 branches from `origin/<trunk>` and PRs target `<trunk>`. For the authoritative
