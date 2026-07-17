@@ -29,7 +29,8 @@
         "generate a KTG signal",
         "change the KTG strategy logic",
         "fix kotquant trading behavior"
-      ]
+      ],
+      "assemble_with": []
     },
     {
       "name": "kore-proxy",
@@ -56,7 +57,8 @@
       "examples": [
         "fix the Kore return path",
         "proxy an execution event"
-      ]
+      ],
+      "assemble_with": []
     },
     {
       "name": "korpse",
@@ -86,7 +88,81 @@
         "fix the trade-plan state machine",
         "route an order through korpse",
         "handle a missing order"
-      ]
+      ],
+      "assemble_with": []
+    },
+    {
+      "name": "infra",
+      "path": "~/repos/infra",
+      "remote": "git@github.com:wisp-capital/infra.git",
+      "trunk": "main",
+      "lang": "config",
+      "status": "active",
+      "role": "infrastructure configuration and cleanup automation shared with Wisp",
+      "edit_policy": "source",
+      "default_assemble": false,
+      "read_first": [
+        "AGENTS.md",
+        "README.md"
+      ],
+      "verify": [
+        "python3 -m pytest"
+      ],
+      "routes": [
+        "infra",
+        "infrastructure",
+        "cleanup",
+        "MicroK8s",
+        "Ansible",
+        "Redis manifests",
+        "Postgres manifests",
+        "monitoring stack",
+        "ClickHouse",
+        "secrets"
+      ],
+      "examples": [
+        "change infrastructure config",
+        "run cleanup automation",
+        "fix infra",
+        "change MicroK8s manifests",
+        "update Ansible provisioning",
+        "change Redis Kubernetes manifests",
+        "fix ClickHouse config on trx50"
+      ],
+      "assemble_with": []
+    },
+    {
+      "name": "ai-max",
+      "path": "~/repos/ai-max",
+      "remote": "git@github.com:wisp-capital/ai-max.git",
+      "trunk": "main",
+      "lang": "python",
+      "status": "active",
+      "role": "reusable AI Max framework and shared orchestration tooling",
+      "edit_policy": "source",
+      "default_assemble": false,
+      "read_first": [
+        "AGENTS.md",
+        "README.md"
+      ],
+      "verify": [
+        "python3 -m pytest"
+      ],
+      "routes": [
+        "ai max",
+        "ai-max",
+        "agent framework",
+        "worktree assembler",
+        "spec to proof",
+        "framework tooling"
+      ],
+      "examples": [
+        "update the AI Max framework",
+        "fix the worktree assembler",
+        "change AI Max specification tooling",
+        "improve AI Max routing"
+      ],
+      "assemble_with": []
     }
   ],
   "disambiguation": [

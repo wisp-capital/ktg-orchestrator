@@ -17,6 +17,8 @@ manifest, framework command wiring, and docs. Assembled worktrees land in `works
 | kotquant | `~/repos/kotquant` | `main` | Kotlin |
 | kore-proxy | `~/repos/kore-proxy` | `main` | Rust |
 | korpse | `~/repos/korpse` | `main` | C++ |
+| infra | `~/repos/infra` | `main` | Config |
+| ai-max | `~/repos/ai-max` | `main` | Python |
 
 For cross-repo agent routing, use the generated
 [`docs/navigation/manifest-index.md`](docs/navigation/manifest-index.md). Refresh
@@ -73,9 +75,11 @@ python3 ~/repos/ai-max/tools/worktree-assembler.py clean --force
 
 ## AI-max operating state
 
-`/Users/alexcstark/repos/ai-max` is the reusable operating framework: Specs
-define target state, inline scenarios define compliance, CI is the breakage
-gate, and the eval continuously reports completeness gaps.
+`~/repos/ai-max` is both the reusable operating framework and a routable KTG
+checkout: Specs define target state, inline scenarios define compliance, CI is
+the breakage gate, and the eval continuously reports completeness gaps. The
+shared `infra` checkout is available for KTG infrastructure and cleanup work;
+neither is part of the three-repository trading loop described above.
 
 ktg-orchestrator holds the KTG-specific state for that framework:
 
