@@ -1,8 +1,7 @@
 # Decisions
 
-Structural decisions for `ktg-orchestrator`. Per `AGENTS.md`, these are not revisited
-without explicit human direction. The reusable operating-model decisions live in
-`~/repos/ai-max/DECISIONS.md`; this file holds only what is specific to KTG.
+Structural decisions for `ktg-orchestrator`. These are not revisited without
+explicit human direction.
 
 | ID | Decision | Rationale |
 |----|----------|-----------|

@@ -7,26 +7,11 @@
 
 branch_prefix = "stark/"
 
-framework_version = "v7.7"
 worktree_root = "workspace/"
 
-[amx]
-state_root = "~/.local/state/ktg-orchestrator"
 
-# Known overlaps where a task could plausibly belong to either repo. `just route`
-# surfaces the matching rule when its top two candidates are exactly this pair.
 
-[[disambiguation]]
-ambiguity = "kotquant vs korpse"
-prefer = "kotquant"
-over = "korpse"
-rule = "KTG signal generation / strategy logic -> kotquant; order routing / trade-plan state machine / executor -> korpse"
 
-[[disambiguation]]
-ambiguity = "kore-proxy vs korpse"
-prefer = "kore-proxy"
-over = "korpse"
-rule = "Kore return path / proxy for execution events -> kore-proxy; strategy executor / trade-plan state machine -> korpse"
 
 
 [[repo]]
@@ -88,18 +73,3 @@ read_first = ["AGENTS.md", "README.md"]
 verify = ["python3 -m pytest"]
 routes = ["infra", "infrastructure", "cleanup", "MicroK8s", "Ansible", "Redis manifests", "Postgres manifests", "monitoring stack", "ClickHouse", "secrets"]
 examples = ["change infrastructure config", "run cleanup automation", "fix infra", "change MicroK8s manifests", "update Ansible provisioning", "change Redis Kubernetes manifests", "fix ClickHouse config on trx50"]
-
-[[repo]]
-name = "ai-max"
-path = "~/repos/ai-max"
-remote = "git@github.com:wisp-capital/ai-max.git"
-trunk = "main"
-lang = "python"
-status = "active"
-role = "reusable AI Max framework and shared orchestration tooling"
-edit_policy = "source"
-default_assemble = false
-read_first = ["AGENTS.md", "README.md"]
-verify = ["python3 -m pytest"]
-routes = ["ai max", "ai-max", "agent framework", "worktree assembler", "spec to proof", "framework tooling"]
-examples = ["update the AI Max framework", "fix the worktree assembler", "change AI Max specification tooling", "improve AI Max routing"]
