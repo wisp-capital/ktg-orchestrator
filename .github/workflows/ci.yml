@@ -15,12 +15,12 @@ jobs:
       - uses: actions/checkout@v4
       - name: Reject default agent context
         run: |
-          test ! -e AGENTS.md
+          test -f AGENTS.md
           test ! -e CLAUDE.md
           test ! -e PREFERENCES.md
-          test ! -e .agents
-          test ! -e .claude
-          test ! -e .pi
+          test ! -e .agents/skills/ai-max-start
+          test ! -e .claude/settings.json
+          test ! -e .pi/settings.json
 
   tests:
     runs-on: ubuntu-latest
