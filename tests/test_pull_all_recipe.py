@@ -7,7 +7,7 @@ from pathlib import Path
 REPO_ROOT = Path(__file__).resolve().parent.parent
 
 
-def test_just_pull_all_dispatches_to_shared_ai_max_tool() -> None:
+def test_just_pull_all_dispatches_to_shared_worktree_tool() -> None:
     if shutil.which("just") is None:
         return
 
