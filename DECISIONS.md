@@ -1,7 +1,8 @@
 # Decisions
 
 Structural decisions for `ktg-orchestrator`. These are not revisited without
-explicit human direction.
+explicit human direction. They describe chosen constraints and ownership; the
+owning code and ordinary tests remain the authority for current behavior.
 
 | ID | Decision | Rationale |
 |----|----------|-----------|

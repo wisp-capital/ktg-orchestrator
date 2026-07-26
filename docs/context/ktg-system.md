@@ -9,8 +9,9 @@ a signal becomes an order, and where to look when one doesn't.
 The code lives in each repo's own checkout (see `manifest.toml`). The manifest also
 includes the shared `infra` and `ai-max` checkouts for infrastructure and framework
 work; they are intentionally outside this signal-to-order map. This map points into
-the trading repos; it does **not** restate their contracts (that would drift). The
-**authoritative sources** are listed at the bottom — read them for field-level detail.
+the trading repos; it is an orientation and routing aid, not current-behavior
+authority. Confirm implementation in the owning code, configuration, and ordinary
+tests. The source locations at the bottom provide field-level context.
 
 ## Components
 
@@ -146,11 +147,11 @@ The strategy-name → account mapping: the wisp side names the variant
 the account (`accountName=...` in the main log). Resolve the account id first, then
 read its worker file.
 
-## Authoritative sources (read these for detail)
+## Owning sources to consult for detail
 
 - **`korpse/docs/signal-flow.md`** — the signal field contract, per-type semantics,
-  routing, ownership model (script policy vs signal overrides). Source of truth for
-  signal behavior.
+  routing, and ownership model (script policy vs signal overrides). Confirm current
+  behavior in the implementation and its tests.
 - **`korpse/CLAUDE.md`** — korpse architecture, state machine, parameters
   (`event_channel`, `buy_algo`/`sell_algo`, account), deployment, tech debt.
 - **`kore-proxy/README.md`** — the return-path services (proxy, relay, ktgnet, kftp),
