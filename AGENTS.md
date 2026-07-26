@@ -5,9 +5,12 @@ assembled worktrees; do not edit linked primary checkouts.
 
 Product Documents, when this repo uses them, describe desired cross-repository
 capability. The owning repositories' code, configuration, schemas, and ordinary
-tests are authoritative for current behavior. A bounded delivery slice needs
-concrete scenarios and normal-suite proof mappings before implementation;
-manual evidence is a retained exception when automation is impractical.
+tests are authoritative for current behavior. An Inbox Work Item selects a
+bounded delivery slice; it needs concrete scenarios and normal-suite proof
+mappings before implementation; manual evidence is a retained exception when
+automation is impractical. The dashboard is passive Product Document completion
+plus Inbox state; do not create batches, Agent Runs, queues, headless workers,
+dispatchers, or autonomous loops.
 
 Before implementation, inspect the owning source and tests for reusable seams.
 Build a shared foundation only for a repeatable need; otherwise implement
