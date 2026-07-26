@@ -3,6 +3,17 @@
 This is an orchestration-only repo. Source changes belong in explicitly
 assembled worktrees; do not edit linked primary checkouts.
 
+Product Documents, when this repo uses them, describe desired cross-repository
+capability. The owning repositories' code, configuration, schemas, and ordinary
+tests are authoritative for current behavior. A bounded delivery slice needs
+concrete scenarios and normal-suite proof mappings before implementation;
+manual evidence is a retained exception when automation is impractical.
+
+Before implementation, inspect the owning source and tests for reusable seams.
+Build a shared foundation only for a repeatable need; otherwise implement
+directly in the owning domain. The manifest and context map route that review;
+they do not prove behavior.
+
 - Never use the `Default` Kore shell for ForwardTest work; use the documented
   ForwardTest path and shell only.
 - Live trading, broker, or capital actions require an explicit user request

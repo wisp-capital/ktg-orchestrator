@@ -4,6 +4,18 @@ A proxy/orchestration meta-repo for KTG (Kore Trading Gateway) work.
 It wraps KTG source repos, provides isolated worktrees, and ships changes
 back to each repo as a pull request. It stores no source code.
 
+## Delivery model
+
+This repository's Product Documents and cross-repository decisions describe
+desired behavior, including future work. Current behavior comes from the owning
+source repository's code, configuration, schemas, and ordinary tests. Select a
+bounded delivery slice, make its scenarios concrete, then map them to the
+owner's normal suite before implementation. Manual evidence is a retained
+exception, not a parallel testing framework.
+
+Review the actual owner code and tests for reuse before implementation. The
+manifest and system map are routing aids, not behavior authorities.
+
 ## Wrapped repos
 
 The active repos are listed in [`manifest.toml`](manifest.toml): kotquant,
